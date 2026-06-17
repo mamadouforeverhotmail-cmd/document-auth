@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vérification Document</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+.card { background: white; border-radius: 16px; padding: 30px 24px; max-width: 400px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center; }
+.shield { font-size: 60px; margin-bottom: 16px; }
+h1 { font-size: 20px; color: #222; margin-bottom: 6px; }
+.doc-info { background: #f8f8f8; border-radius: 10px; padding: 14px; margin: 20px 0; text-align: left; font-size: 14px; color: #555; line-height: 2; }
+.doc-info strong { color: #222; }
+label { font-size: 14px; color: #666; display: block; margin-bottom: 8px; }
+input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 10px; font-size: 18px; text-align: center; letter-spacing: 3px; outline: none; transition: border 0.2s; }
+input:focus { border-color: #22CC00; }
+button { width: 100%; padding: 14px; background: #22CC00; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 14px; transition: background 0.2s; }
+button:hover { background: #1aaa00; }
+.result { display: none; padding: 20px 0 10px; }
+.result-icon { font-size: 60px; margin-bottom: 12px; }
+.result-title { font-size: 20px; font-weight: bold; margin-bottom: 8px; }
+.result-ok { color: #22CC00; }
+.result-fail { color: #e53935; }
+.result-details { background: #f8f8f8; border-radius: 10px; padding: 14px; text-align: left; font-size: 14px; color: #555; line-height: 2; margin-top: 10px; }
+.btn-retry { background: #666; margin-top: 12px; }
+.btn-retry:hover { background: #444; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div id="form-section">
+    <div class="shield">🛡️</div>
+    <h1>Vérification de document</h1>
+    <p style="font-size:13px;color:#888;margin-top:4px;">Entrez le code pour authentifier</p>
+
+    <div class="doc-info">
+      <strong>Type :</strong> AVI (Attestation)<br>
+      <strong>Date :</strong> 30/05/2026<br>
+      <strong>Référence :</strong> SN-17658
+    </div>
+
+    <label>Code d'authentification</label>
+    <input type="text" id="code-input" placeholder="- - - - - - - - -" maxlength="20" />
+    <div id="err" style="color:red;font-size:13px;margin-top:8px;display:none;">Veuillez entrer le code.</div>
+    <button onclick="verify()">✔ Vérifier l'authenticité</button>
+  </div>
+
+  <div class="result" id="result-ok">
+    <div class="result-icon">✅</div>
+    <div class="result-title result-ok">Document Authentique</div>
+    <p style="font-size:13px;color:#666;margin-top:4px;">Ce document a été vérifié avec succès.</p>
+    <div class="result-details">
+      <strong>Type :</strong> AVI (Attestation)<br>
+      <strong>Date :</strong> 30/05/2026<br>
+      <strong>Référence :</strong> SN-17658<br>
+      <strong>Statut :</strong> ✅ Authentique
+    </div>
+    <button class="btn-retry" onclick="reset()">🔄 Nouvelle vérification</button>
+  </div>
+
+  <div class="result" id="result-fail">
+    <div class="result-icon">❌</div>
+    <div class="result-title result-fail">Document Non Authentifié</div>
+    <p style="font-size:13px;color:#666;margin-top:4px;">Le code saisi est incorrect.</p>
+    <button class="btn-retry" onclick="reset()">🔄 Réessayer</button>
+  </div>
+
+</div>
+
+<script>
+var SECRET = '653423785';
+
+function verify() {
+  var val = document.getElementById('code-input').value.trim();
+  var err = document.getElementById('err');
+  if (!val) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  document.getElementById('form-section').style.display = 'none';
+  if (val === SECRET) {
+    document.getElementById('result-ok').style.display = 'block';
+  } else {
+    document.getElementById('result-fail').style.display = 'block';
+  }
+}
+
+function reset() {
+  document.getElementById('code-input').value = '';
+  document.getElementById('form-section').style.display = 'block';
+  document.getElementById('result-ok').style.display = 'none';
+  document.getElementById('result-fail').style.display = 'none';
+}
+
+document.getElementById('code-input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') verify();
+});
+</script>
+</body>
+</html>
